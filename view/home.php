@@ -5,48 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio</title>
     <link rel="icon" href="../img/logo-app.jpg">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/simplebar.css">
-    <style>
-        body {
-            background-color: #D9C39C;
-        }
-        .navbar {
-            width: 250px;
-            background-color: #A5794B;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .navbar a {
-            text-decoration: none;
-            color: #333;
-            display: block;
-            padding: 10px 20px;
-            border-bottom: 1px solid #eaeaea;
-        }
-        .navbar a:hover {
-            background-color: #f5f5f5;
-        }
-        .navbar .nav-heading {
-            font-size: 1.2em;
-            font-weight: bold;
-            padding: 10px 20px;
-            color: #555;
-            background-color: #f0f0f0;
-        }
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="vertnav navbar navbar-light">
-    <div class="w-100 mb-4 d-flex">
-        <a class="navbar-brand ps-3 " style="max-height: 10px;">
-        <img class="img-fluid" style="max-height: 40px;" src="../img/logo-app-fondoBlanco.jpg"> Mana pan del cielo
-        </a>
+    <?php include('menu.php'); ?>
+    <div class="flex-1 p-6">
+            <h1 class="text-5xl text-yellow-800 font-bold mb-6">¡Bienvenido!</h1>
+            <p class="text-gray-600 mb-8">Gestiona tu invetario, insumos, reportes y clientes.</p>
+            <div class="grid grid-cols-2 gap-6">
+                <div class="bg-white rounded-lg p-6 shadow-md">
+                    <h2 class="text-xl font-semibold mb-4">Recent Orders</h2>
+                    <ul class="space-y-2">
+                        <li>
+                            <div class="flex items-center justify-between">
+                                <span>Order #123</span>
+                                <span class="font-medium">$250.00</span>
+                            </div>
+                            <div class="text-gray-600 text-sm">Shipped on 05/25/2023</div>
+                        </li>
+                        <li>
+                            <div class="flex items-center justify-between">
+                                <span>Order #124</span>
+                                <span class="font-medium">$180.00</span>
+                            </div>
+                            <div class="text-gray-600 text-sm">Shipped on 05/22/2023</div>
+                        </li>
+                        <li>
+                            <div class="flex items-center justify-between">
+                                <span>Order #125</span>
+                                <span class="font-medium">$320.00</span>
+                            </div>
+                            <div class="text-gray-600 text-sm">Shipped on 05/20/2023</div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="bg-white rounded-lg p-6 shadow-md">
+                    <h2 class="text-xl font-semibold mb-4">Top Selling Products</h2>
+                    <ul class="space-y-2">
+                        <li>
+                            <div class="flex items-center justify-between">
+                                <span>Product A</span>
+                                <span class="font-medium">150 units</span>
+                            </div>
+                            <div class="text-gray-600 text-sm">Sold in the last 30 days</div>
+                        </li>
+                        <li>
+                            <div class="flex items-center justify-between">
+                                <span>Product B</span>
+                                <span class="font-medium">120 units</span>
+                            </div>
+                            <div class="text-gray-600 text-sm">Sold in the last 30 days</div>
+                        </li>
+                        <li>
+                            <div class="flex items-center justify-between">
+                                <span>Product C</span>
+                                <span class="font-medium">100 units</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-    <ul class="navbar-nav flex-fill w-100 mb-2">
-        <li class="nav-item dropdown">
-            <span class="ml-3 item-text">Dashboard</span>
-        </li>
-    </ul>
-    </nav>
 </body>
 </html>
