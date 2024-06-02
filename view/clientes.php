@@ -1,7 +1,23 @@
 <?php
 
 include '../class/ClientesConexion.php';
+include '../class/TipoDocumento.php';
 
+// Si se envió el formulario
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  // Obtener los datos del formulario
+  $nombre = $_POST['cl_nombre'];
+  $apellido = $_POST['cl_apellido'];
+  $documento = $_POST['cl_documento'];
+  $td_id = $_POST['td_id'];
+  $telefono = $_POST['cl_telefono'];
+  $email = $_POST['cl_email'];
+  
+  // Llamar a la función para crear un nuevo cliente
+  $resultado = CrearClientes($nombre, $apellido, $documento, $td_id, $telefono, $email);
+}
+
+// Obtener la lista de clientes
 $data = ListarClientes();
 
 ?>
@@ -21,7 +37,7 @@ $data = ListarClientes();
     <div class="flex-1 p-6">
         <h1 class="text-6xl text-yellow-800 mb-1 oleo-script">Clientes</h1>
         <div class="mt-4 flex justify-end mb-3">
-            <button class="custom-bg text-white px-4 py-2 rounded-md" onclick="window.location.href='produccion.php'">Crear cliente</button>
+            <button class="custom-bg text-white px-4 py-2 rounded-md" onclick="showForm()">Crear nuevo cliente</button>
         </div>
         <div class="bg-white shadow-md rounded-lg p-6">
         <h2 class="text-lg font-bold mb-4">Lista de clientes</h2>
@@ -62,5 +78,6 @@ $data = ListarClientes();
       </div>
     </div>
 </div>
+<?php include 'MetodosCliente/CrearCliente.php'; ?>
 </body>
 </html>

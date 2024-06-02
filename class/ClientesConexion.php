@@ -41,14 +41,14 @@ function CrearClientes($nombre, $apellido, $documento, $td_id, $telefono ,$email
     'cl_telefono' => $telefono,
     'cl_email' => $email),
     CURLOPT_HTTPHEADER => array(
-        'Authorization: ••••••'
+      'Authorization: Basic YTJhYTA3YWRmaGRmcmV4ZmhnZGZoZGZlcnR0Z2VCL3F6cjhOSS9yMS9QRi5XQmFnRGY5eXN5R21Wa0ptOm8yYW8wN29kZmhkZnJleGZoZ2RmaGRmZXJ0dGdlcHhoT0hsb2JKaVUvUi8ucnR1ZlJDWnpsOHhPZW4ucQ=='
     ),
     ));
 
     $response = curl_exec($curl);
 
     curl_close($curl);
-    return $response;
+    return json_decode($response, true);
 }
 
 function BuscarCliente($id){
