@@ -45,7 +45,7 @@
                     </svg>
                     <span class="text-lg">Producción</span>
                 </a>
-                <a class="flex items-center gap-2 rounded-md px-3 py-2 hover-effect" href="#">
+                <a class="flex items-center gap-2 rounded-md px-3 py-2 hover-effect" href="inventario.php">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"

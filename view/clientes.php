@@ -2,6 +2,8 @@
 
 include '../class/ClientesConexion.php';
 
+$data = ListarClientes();
+
 ?>
 
 <!DOCTYPE html>
@@ -15,11 +17,11 @@ include '../class/ClientesConexion.php';
     <link href="https://fonts.googleapis.com/css2?family=Oleo+Script&display=swap" rel="stylesheet">
 </head>
 <body>
-<?php include('menu.php'); ?>
+<?php include 'menu.php'; ?>
     <div class="flex-1 p-6">
         <h1 class="text-6xl text-yellow-800 mb-1 oleo-script">Clientes</h1>
-        <div class="mt-4 flex justify-end mb-6">
-            <button class="custom-bg text-white px-4 py-2 rounded-md">Crear cliente</button>
+        <div class="mt-4 flex justify-end mb-3">
+            <button class="custom-bg text-white px-4 py-2 rounded-md" onclick="window.location.href='produccion.php'">Crear cliente</button>
         </div>
         <div class="bg-white shadow-md rounded-lg p-6">
         <h2 class="text-lg font-bold mb-4">Lista de clientes</h2>
@@ -28,9 +30,9 @@ include '../class/ClientesConexion.php';
             <tr class="bg-gray-200">
               <th class="px-4 py-2 text-left">#</th>
               <th class="px-4 py-2 text-left">Nombre & Apellido</th>
-              <th class="px-4 py-2 text-center">DNI</th>
-              <th class="px-4 py-2 text-center">Telefono</th>
-              <th class="px-4 py-2 text-center">Email</th>
+              <th class="px-4 py-2 text-left">DNI</th>
+              <th class="px-4 py-2 text-left">Telefono</th>
+              <th class="px-4 py-2 text-left">Email</th>
               <th class="px-4 py-2 text-center">Acciones</th>
             </tr>
           </thead>
@@ -42,9 +44,9 @@ include '../class/ClientesConexion.php';
                 echo "<tr>
                         <td class='border-b px-4 py-2'>{$client['cl_id']}</td>
                         <td class='border-b px-4 py-2'>{$client['cl_nombre']} {$client['cl_apellido']}</td>
-                        <td class='border-b px-4 py-2 text-center'>{$client['cl_documento']}</td>
-                        <td class='border-b px-4 py-2 text-center'>{$client['cl_telefono']}</td>
-                        <td class='border-b px-4 py-2 text-center'>{$client['cl_email']}</td>
+                        <td class='border-b px-4 py-2'>{$client['cl_documento']}</td>
+                        <td class='border-b px-4 py-2'>{$client['cl_telefono']}</td>
+                        <td class='border-b px-4 py-2'>{$client['cl_email']}</td>
                         <td class='border-b px-4 py-2 text-center'>
                             <button class='bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 mr-2'>Editar</button>
                             <button class='bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700'>Eliminar</button>
