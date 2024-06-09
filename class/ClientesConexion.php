@@ -63,7 +63,7 @@ function BuscarCliente($id)
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-        CURLOPT_URL => CLIENTES_URL.'/'.$id,
+        CURLOPT_URL => CLIENTES_URL . '/' . $id,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
@@ -84,8 +84,6 @@ function BuscarCliente($id)
 
 function EditarCliente($id, $nombre, $apellido, $documento, $td_id, $telefono, $email)
 {
-
-
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
@@ -97,23 +95,21 @@ function EditarCliente($id, $nombre, $apellido, $documento, $td_id, $telefono, $
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'PUT',
-        CURLOPT_POSTFIELDS =>
-        'cl_nombre=' . $nombre .
-            '&cl_apellido=' . $apellido .
-            '&cl_documento=' . $documento .
-            '&td_id=' . $td_id .
-            '&cl_telefono=' . $telefono .
-            '&cl_email=' . $email,
+        CURLOPT_POSTFIELDS => 'cl_nombre=' . $nombre . '&' . 'cl_apellido=' . $apellido . '&' . 'cl_documento=' . $documento . '&' . 'td_id=' . $td_id . '&' . 'cl_telefono=' . $telefono . '&' . 'cl_email=' . $email,
         CURLOPT_HTTPHEADER => array(
             'Content-Type: application/x-www-form-urlencoded',
-            'Authorization: ••••••'
+            'Authorization: Basic YTJhYTA3YWRmaGRmcmV4ZmhnZGZoZGZlcnR0Z2VCL3F6cjhOSS9yMS9QRi5XQmFnRGY5eXN5R21Wa0ptOm8yYW8wN29kZmhkZnJleGZoZ2RmaGRmZXJ0dGdlcHhoT0hsb2JKaVUvUi8ucnR1ZlJDWnpsOHhPZW4ucQ=='
         ),
     ));
 
     $response = curl_exec($curl);
 
+    if ($response === false) {
+        $response = json_encode(['Status' => 500, 'Error' => curl_error($curl)]);
+    }
+
     curl_close($curl);
-    return $response;
+    return json_decode($response, true);
 }
 
 function Delete($id)

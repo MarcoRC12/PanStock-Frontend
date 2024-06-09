@@ -85,8 +85,8 @@ $data = ListarClientes();
                         <td class='border-b px-4 py-2'>{$client['cl_telefono']}</td>
                         <td class='border-b px-4 py-2'>{$client['cl_email']}</td>
                         <td class='border-b px-4 py-2 text-center'>
-                        <button class='bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 mr-2' onclick='EditshowForm({$client["cl_id"]})'>Editar</button>
-                            <button class='bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700' onclick='deleteClient({$client["cl_id"]})'>Eliminar</button>
+                        <button class='bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 mr-2' onclick='editClient({$client["cl_id"]})'>Editar</button>
+                        <button class='bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700' onclick='deleteClient({$client["cl_id"]})'>Eliminar</button>
                         </td>
                       </tr>";
               }
@@ -103,8 +103,12 @@ $data = ListarClientes();
   <script src="../lib/alertifyjs/alertify.js"></script>
   <script src="../lib/jquery-3.7.1.min.js"></script>
   <script src="../js/eliminarcliente.js"></script>
+  <script>
+    function editClient(id) {
+      window.location.href = 'MetodosCliente/EditarCliente.php?id=' + id;
+    }
+  </script>
   <?php include 'MetodosCliente/CrearCliente.php'; ?>
-  <?php include 'MetodosCliente/EditarCliente.php'; ?>
 </body>
 
 </html>
