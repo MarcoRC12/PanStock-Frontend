@@ -21,10 +21,9 @@ if ($cliente_id) {
     die("ID de cliente no proporcionado.");
 }
 
-// Verificar si se ha enviado un formulario de edición
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Procesar la solicitud PUT
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['_method']) && $_POST['_method'] == 'PUT') {
     // Obtener los datos del formulario
-    $cliente_id = $_POST['cl_id'];
     $nombre = $_POST['cl_nombre'];
     $apellido = $_POST['cl_apellido'];
     $documento = $_POST['cl_documento'];
@@ -32,28 +31,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $telefono = $_POST['cl_telefono'];
     $email = $_POST['cl_email'];
 
-    // Realizar la solicitud PUT para editar el cliente
+    // Llamar a la función para editar el cliente
     $resultado = EditarCliente($cliente_id, $nombre, $apellido, $documento, $td_id, $telefono, $email);
 
-    // Verificar si la solicitud fue exitosa
-    if ($resultado && isset($resultado['Status']) && $resultado['Status'] == 200) {
-        // Mostrar mensaje de éxito con Alertify
-        echo "<script>
-                alertify.success('Datos actualizados');
-              </script>";
-        // Redireccionar a la página de clientes después de unos segundos
-        echo "<script>
-                setTimeout(function() {
-                  window.location.href = '../clientes.php';
-                }, 3000);
-              </script>";
-    } else {
-        // Mostrar mensaje de error con Alertify
-        echo "<script>
-                alertify.error('Error al editar el cliente');
-              </script>";
-    }
+    // Asegurarse de que solo se envíe un JSON en la respuesta
+    header('Content-Type: application/json');
+    echo json_encode($resultado);
+    exit();
 }
+
 
 ?>
 
@@ -88,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="space-y-2">
                 <h1 class="text-5xl tracking-tighter oleo-script">Editar Cliente</h1>
             </div>
-            <form class=" bg-white shadow-md rounded-lg p-6 space-y-2" method="POST" action="actualizarCliente.php">
+            <form id="editClientForm" class=" bg-white shadow-md rounded-lg p-6 space-y-2" method="POST">
                 <input type="hidden" name="cl_id" value="<?= htmlspecialchars($cliente_id) ?>">
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
@@ -101,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="lastName">
                             Apellido
                         </label>
-                        <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="lastName" name="cl_apellido" placeholder="Doe" value="<?= htmlspecialchars($cliente['cl_apellido'] ?? '') ?>" required />
+                        <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="lastName" name="cl_apellido" value="<?= htmlspecialchars($cliente['cl_apellido'] ?? '') ?>" required />
                     </div>
                 </div>
                 <div class="space-y-2">
@@ -140,11 +126,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </form>
         </div>
     </div>
+    <script src="../../lib/alertifyjs/alertify.js"></script>
+    <script src="../../lib/jquery-3.7.1.min.js"></script>
     <script>
         function clientes() {
             window.location.href = '../clientes.php';
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('editClientForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                var form = event.target;
+
+                var formData = new FormData(form);
+                var xhr = new XMLHttpRequest();
+                xhr.open('PUT', form.action, true);
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            if (xhr.status === 200 && response.Status === 200) {
+                                alertify.success('Datos actualizados');
+                            } else {
+                                alertify.error('Error al actualizar los datos');
+                            }
+                        } catch (e) {
+                            console.error('Error al parsear la respuesta:', xhr.responseText);
+                            alertify.error('Error al procesar la solicitud');
+                        }
+                    }
+                };
+                xhr.send(formData);
+            });
+        });
     </script>
+
 </body>
 
 </html>

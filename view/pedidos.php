@@ -31,7 +31,7 @@ $data = ListarPedidos();
       <h2 class="text-lg font-bold mb-2">Lista de pedidos</h2>
       <div class="table-container">
         <table class="w-full table-auto">
-          <thead>
+          <thead class="sticky top-0">
             <tr class="bg-gray-200">
               <th class="px-4 py-2 text-left">#</th>
               <th class="px-4 py-2 text-left">Cliente</th>
