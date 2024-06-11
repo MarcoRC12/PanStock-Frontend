@@ -40,7 +40,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['_method']) && $_POST['
     exit();
 }
 
-
 ?>
 
 <!DOCTYPE html>
@@ -74,26 +73,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['_method']) && $_POST['
             <div class="space-y-2">
                 <h1 class="text-5xl tracking-tighter oleo-script">Editar Cliente</h1>
             </div>
-            <form id="editClientForm" class=" bg-white shadow-md rounded-lg p-6 space-y-2" method="POST">
+            <form id="editClientForm" class="bg-white shadow-md rounded-lg p-6 space-y-2" method="POST" action="">
+                <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="cl_id" value="<?= htmlspecialchars($cliente_id) ?>">
                 <div class="grid grid-cols-2 gap-4">
                     <div class="space-y-2">
-                        <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="firstName">
-                            Nombre
-                        </label>
+                        <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="firstName">Nombre</label>
                         <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="firstName" name="cl_nombre" value="<?= htmlspecialchars($cliente['cl_nombre'] ?? '') ?>" required />
                     </div>
                     <div class="space-y-2">
-                        <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="lastName">
-                            Apellido
-                        </label>
+                        <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="lastName">Apellido</label>
                         <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="lastName" name="cl_apellido" value="<?= htmlspecialchars($cliente['cl_apellido'] ?? '') ?>" required />
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="td_id">
-                        Tipo de documento
-                    </label>
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="td_id">Tipo de documento</label>
                     <select class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="td_id" name="td_id" required>
                         <?php foreach ($data_tdocumento["Detalle"] as $td) : ?>
                             <option value="<?= htmlspecialchars($td["td_id"]) ?>" <?= (isset($cliente['td_id']) && $cliente['td_id'] == $td['td_id']) ? 'selected' : '' ?>><?= htmlspecialchars($td["td_nombre"]) ?></option>
@@ -101,33 +95,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['_method']) && $_POST['
                     </select>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="dni">
-                        DNI
-                    </label>
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="dni">DNI</label>
                     <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="dni" name="cl_documento" value="<?= htmlspecialchars($cliente['cl_documento'] ?? '') ?>" required />
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="phone">
-                        Telefono
-                    </label>
-                    <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="phone" name="cl_telefono" type="tel" value="<?= htmlspecialchars($cliente['cl_telefono'] ?? '') ?>" required />
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="phone">Teléfono</label>
+                    <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="phone" name="cl_telefono" value="<?= htmlspecialchars($cliente['cl_telefono'] ?? '') ?>" required />
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="email">
-                        Email
-                    </label>
-                    <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="email" name="cl_email" type="email" value="<?= htmlspecialchars($cliente['cl_email'] ?? '') ?>" required />
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="email">Correo Electrónico</label>
+                    <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="email" type="email" name="cl_email" value="<?= htmlspecialchars($cliente['cl_email'] ?? '') ?>" required />
                 </div>
                 <div class="flex justify-end pt-4">
                     <button type="button" class="mr-2 bg-red-600 text-white px-4 py-2 rounded-md" onclick="clientes()">Cancelar</button>
                     <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md">Modificar</button>
                 </div>
-                <div class="space-y-2"></div>
             </form>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../lib/alertifyjs/alertify.js"></script>
-    <script src="../../lib/jquery-3.7.1.min.js"></script>
     <script>
         function clientes() {
             window.location.href = '../clientes.php';
@@ -139,15 +126,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['_method']) && $_POST['
                 var form = event.target;
 
                 var formData = new FormData(form);
+                var queryString = new URLSearchParams(formData).toString(); // Serializar datos
+
                 var xhr = new XMLHttpRequest();
-                xhr.open('PUT', form.action, true);
+                xhr.open('POST', form.action, true); // Mantener POST
                 xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState === 4) {
                         try {
                             var response = JSON.parse(xhr.responseText);
                             if (xhr.status === 200 && response.Status === 200) {
                                 alertify.success('Datos actualizados');
+                                window.location.href = '../clientes.php';
                             } else {
                                 alertify.error('Error al actualizar los datos');
                             }
@@ -157,11 +148,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['_method']) && $_POST['
                         }
                     }
                 };
-                xhr.send(formData);
+                xhr.send(queryString + '&_method=PUT'); // Añadir _method=PUT
             });
         });
     </script>
-
 </body>
 
 </html>
