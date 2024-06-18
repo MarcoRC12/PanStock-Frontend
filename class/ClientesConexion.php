@@ -125,7 +125,7 @@ function EditarCliente($id, $nombre, $apellido, $documento, $td_id, $telefono, $
     return json_decode($response, true);
 }
 
-function Delete($id)
+function EliminarCliente($id)
 {
 
     $curl = curl_init();

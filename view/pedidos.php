@@ -36,7 +36,7 @@ $data = ListarPedidos();
               <th class="px-4 py-2 text-left">#</th>
               <th class="px-4 py-2 text-left">Cliente</th>
               <th class="px-4 py-2 text-left">Número de pedido</th>
-              <th class="px-4 py-2 text-left">Direccióm</th>
+              <th class="px-4 py-2 text-left">Dirección</th>
               <th class="px-4 py-2 text-left">Fecha de entrega</th>
               <th class="px-4 py-2 text-center">Acciones</th>
             </tr>

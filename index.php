@@ -25,11 +25,11 @@
                     <form id="loginForm" class="col-xl-8 offset-2"> <br>
                         <div class="form-group">
                             <label for="username">Usuario</label>
-                            <input type="text" class="form-control" id="username" name="us_usu" required>
+                            <input type="text" class="form-control" id="username" name="usu_usuario" required>
                         </div>
                         <div class="form-group">
                             <label for="password">Contraseña</label>
-                            <input type="password" class="form-control" id="password" name="us_pas" required>
+                            <input type="password" class="form-control" id="password" name="usu_contrasena" required>
                         </div><br>
                         <div class="form-check mb-3">
                             <input class="form-check-input" id="inputRememberPassword" type="checkbox" value="" />
@@ -60,8 +60,8 @@
                     url: 'class/Usuarios.php',
                     type: 'POST',
                     data: {
-                        us_usu: username,
-                        us_pas: password
+                        usu_usuario: username,
+                        usu_contrasena: password
                     },
                     dataType: 'json',
                     success: function(response) {

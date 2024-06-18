@@ -21,10 +21,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ajax'])) {
     exit();
 }
 
-// Manejar la eliminación del cliente
+// Manejar la eliminación del producto
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
     $id = $_POST['pro_id'];
-    $resultado = Delete($id);
+    $resultado = EliminarProducto($id);
   
     header('Content-Type: application/json');
     echo json_encode($resultado);
@@ -99,6 +99,11 @@ $data = ListarProductos();
     <script src="../lib/alertifyjs/alertify.js"></script>
     <script src="../lib/jquery-3.7.1.min.js"></script>
     <script src="../js/eliminarproducto.js"></script>
+    <script>
+    function editProduct(id) {
+      window.location.href = 'MetodosProductos/EditarProducto.php?id=' + id;
+    }
+  </script>
     <?php include 'MetodosProductos/CrearProducto.php' ?>
 </body>
 

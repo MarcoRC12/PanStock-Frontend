@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ajax'])) {
 // Manejar la eliminación del cliente
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
   $id = $_POST['cl_id'];
-  $resultado = Delete($id);
+  $resultado = EliminarCliente($id);
 
   header('Content-Type: application/json');
   echo json_encode($resultado);
