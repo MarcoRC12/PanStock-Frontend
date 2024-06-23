@@ -22,6 +22,22 @@ if ($inventario_id) {
 //Listar Productos
 $data_products = ListarProductos();
 
+//Procesar la solicitud PUT
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['_method']) && $_POST['_method'] == 'PUT') {
+    // Obtener los datos
+    $proid = $_POST['pro_id'];
+    $invcantidadtotal = $_POST['inv_cantidad_total'];
+    $invcantidaddisponible = $_POST['inv_cantidad_disponible'];
+    $invfechaadquisicion = $_POST['inv_fecha_adquisicion'];
+
+    $resultado = ModificarInventario($inventario_id, $proid, $invcantidadtotal, $invcantidaddisponible, $invfechaadquisicion);
+
+    // Asegurarse de que solo se envíe un JSON en la respuesta
+    header('Content-Type: application/json');
+    echo json_encode($resultado);
+    exit();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +78,7 @@ $data_products = ListarProductos();
                     <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="producto">Producto</label>
                     <select class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="pro_id" name="pro_id" required>
                         <?php foreach ($data_products["Detalle"] as $proid) : ?>
-                            <option value="<?= htmlspecialchars($proid["pro_id"]) ?>" <?= (isset($invetario["pro_id"]) && $invetario['pro_id'] == $proid['pro_id']) ? 'select' : '' ?>><?= htmlspecialchars($proid['pro_nombre']) ?></option>
+                            <option value="<?= htmlspecialchars($proid["pro_id"]) ?>" <?= (isset($invetario["pro_id"]) && $invetario['pro_id'] == $proid['pro_id']) ? 'selected' : '' ?>><?= htmlspecialchars($proid['pro_nombre']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -91,6 +107,38 @@ $data_products = ListarProductos();
         function inventario() {
             window.location.href = '../inventario.php';
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('editInventoryForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                var form = event.target;
+
+                var formData = new FormData(form);
+                var queryString = new URLSearchParams(formData).toString(); // Serializar datos
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', form.action, true); // Mantener POST
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState === 4) {
+                        try {
+                            var response = JSON.parse(xhr.responseText);
+                            if (xhr.status === 200 && response.Status === 200) {
+                                alertify.success('Datos actualizados');
+                                window.location.href = '../inventario.php';
+                            } else {
+                                alertify.error('Error al actualizar los datos');
+                            }
+                        } catch (e) {
+                            console.error('Error al parsear la respuesta:', xhr.responseText);
+                            alertify.error('Error al procesar la solicitud');
+                        }
+                    }
+                };
+                xhr.send(queryString + '&_method=PUT'); // Añadir _method=PUT
+            });
+        });
     </script>
 </body>
 

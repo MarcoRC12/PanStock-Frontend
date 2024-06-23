@@ -25,5 +25,3 @@ function ListarPedidos()
   curl_close($curl);
   return json_decode($response, true);
 }
-
-?>

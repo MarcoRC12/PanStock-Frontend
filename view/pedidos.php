@@ -1,6 +1,7 @@
 <?php
 
 include '../class/PedidosConexion.php';
+include '../class/ClientesConexion.php';
 
 $data = ListarPedidos();
 
@@ -25,7 +26,7 @@ $data = ListarPedidos();
   <div class="flex-1 p-6">
     <h1 class="text-6xl text-yellow-800 mb-1 oleo-script">Pedidos</h1>
     <div class="mt-4 flex justify-end mb-3">
-      <button class="custom-bg text-white px-4 py-2 rounded-md">Crear pedido</button>
+      <button class="custom-bg text-white px-4 py-2 rounded-md" onclick="showForm()">Registrar pedido</button>
     </div>
     <div class="bg-white shadow-md rounded-lg p-6">
       <h2 class="text-lg font-bold mb-2">Lista de pedidos</h2>
@@ -38,6 +39,7 @@ $data = ListarPedidos();
               <th class="px-4 py-2 text-left">Número de pedido</th>
               <th class="px-4 py-2 text-left">Dirección</th>
               <th class="px-4 py-2 text-left">Fecha de entrega</th>
+              <th class="px-4 py-2 text-left">Precio Total</th>
               <th class="px-4 py-2 text-center">Acciones</th>
             </tr>
           </thead>
@@ -52,6 +54,7 @@ $data = ListarPedidos();
                         <td class='border-b px-4 py-2'>{$order['pe_numero']}</td>
                         <td class='border-b px-4 py-2'>{$order['pe_direccion']}</td>
                         <td class='border-b px-4 py-2'>{$order['pe_fechaentrega']}</td>
+                        <td class='border-b px-4 py-2'>{$order['pe_preciototal']}</td>
                         <td class='border-b px-4 py-2 text-center'>
                         <button class='bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 mr-2' onclick='showForm()'>Editar</button>
                             <button class='bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700' onclick='deleteOrder({$order["pe_id"]})'>Eliminar</button>
@@ -70,6 +73,7 @@ $data = ListarPedidos();
   </div>
   <script src="../lib/alertifyjs/alertify.js"></script>
   <script src="../lib/jquery-3.7.1.min.js"></script>
+  <?php include 'MetodosProductos_Pedidos/RegistrarPedido.php'; ?>
 </body>
 
 </html>
