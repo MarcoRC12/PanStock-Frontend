@@ -56,7 +56,13 @@ $data = ListarClientes();
   <div class="flex-1 p-6">
     <h1 class="text-6xl text-yellow-800 mb-1 oleo-script">Clientes</h1>
     <div class="mt-4 flex justify-end mb-3">
-      <button class="custom-bg text-white px-4 py-2 rounded-md" onclick="showForm()">Crear nuevo cliente</button>
+      <button class="custom-bg inline-flex items-center justify-center text-white px-4 py-2 rounded-md" onclick="showForm()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
+          <path d="M5 12h14"></path>
+          <path d="M12 5v14"></path>
+        </svg>
+        Registrar cliente
+      </button>
     </div>
     <div class="bg-white shadow-md rounded-lg p-6">
       <h2 class="text-lg font-bold mb-2">Lista de clientes</h2>
@@ -85,8 +91,20 @@ $data = ListarClientes();
                         <td class='border-b px-4 py-2'>{$client['cl_telefono']}</td>
                         <td class='border-b px-4 py-2'>{$client['cl_email']}</td>
                         <td class='border-b px-4 py-2 text-center'>
-                        <button class='bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 mr-2' onclick='editClient({$client["cl_id"]})'>Editar</button>
-                        <button class='bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700' onclick='deleteClient({$client["cl_id"]})'>Eliminar</button>
+                        <button class='bg-yellow-400 inline-flex items-center justify-center text-black px-4 py-2 rounded-md hover:bg-yellow-500 mr-2' onclick='editClient({$client["cl_id"]})'>
+                                <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='h-4 w-4'>
+                                    <path d='M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v10'></path>
+                                    <path d='M14 2v4a2 2 0 0 0 2 2h4'></path>
+                                    <path d='M10.4 12.6a2 2 0 1 1 3 3L8 21l-4 1 1-4Z'></path>
+                                </svg>
+                        </button>
+                        <button class='bg-red-700 inline-flex items-center justify-center text-white px-4 py-2 rounded-md hover:bg-red-800' onclick='deleteClient({$client["cl_id"]})'>
+                                <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='h-4 w-4'>
+                                    <path d='M3 6h18'></path>
+                                    <path d='M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6'></path>
+                                    <path d='M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2'></path>
+                                </svg>
+                        </button>
                         </td>
                       </tr>";
               }
