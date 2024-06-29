@@ -1,6 +1,6 @@
 <?php
-
 include '../../class/PedidosConexion.php';
+include '../../class/ProductoPedidosConexion.php';
 include '../../class/ClientesConexion.php';
 include '../../class/ProductosConexion.php';
 
@@ -184,7 +184,13 @@ $data_products = ListarProductos();
                     <td class="h-12 px-4 text-left align-middle">${precioTotal}</td>
                     <td class="h-12 px-4 text-left align-middle hidden">${descripcion}</td>
                     <td class="h-12 px-4 text-left align-middle">
-                        <button type="button" class="bg-red-500 text-white px-2 py-1 rounded-md" onclick="removeRow(this)">Eliminar</button>
+                        <button type="button" class="bg-red-500 text-white px-2 py-1 rounded-md" onclick="removeRow(this)">
+                            <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='h-4 w-4'>
+                                    <path d='M3 6h18'></path>
+                                    <path d='M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6'></path>
+                                    <path d='M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2'></path>
+                                </svg>
+                        </button>
                     </td>
                 `;
 
@@ -196,7 +202,6 @@ $data_products = ListarProductos();
         function removeRow(button) {
             button.closest('tr').remove();
         }
-
     </script>
     <?php include 'RegistarProductoPedidos.php'; ?>
 </body>
