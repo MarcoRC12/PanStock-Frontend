@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['ajax'])) {
     $prodescripcion = $_POST['pro_descripcion'];
     $tproid = $_POST['tpro_id'];
     $promarca = $_POST['pro_marca'];
-    $proimagen = $_POST['pro_imagen'];
+    $proimagen = new CURLFILE($_FILES['pro_imagen']['tmp_name']);
 
     //Llamar a la funcion para crear un nuevo producto
     $resultado = CrearProducto($pronombre, $prodescripcion, $tproid, $promarca, $proimagen);

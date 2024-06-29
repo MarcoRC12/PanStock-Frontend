@@ -90,12 +90,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['_method']) && $_POST['
                     </select>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="dni">Marca</label>
-                    <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="pro_marca" name="pro_marca" value="<?= htmlspecialchars($producto['pro_marca'] ?? '') ?>" required />
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="marca">Marca</label>
+                    <select class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="pro_marca" name="pro_marca" required>
+                        <option value="La Panadería" <?= (isset($producto['pro_marca']) && $producto['pro_marca'] == 'La Panadería') ? 'selected' : '' ?>>La Panadería</option>
+                        <option value="La Repostería" <?= (isset($producto['pro_marca']) && $producto['pro_marca'] == 'La Repostería') ? 'selected' : '' ?>>La Repostería</option>
+                        <option value="Dulce Delicia" <?= (isset($producto['pro_marca']) && $producto['pro_marca'] == 'Dulce Delicia') ? 'selected' : '' ?>>Dulce Delicia</option>
+                        <option value="Pan Saludable" <?= (isset($producto['pro_marca']) && $producto['pro_marca'] == 'Pan Saludable') ? 'selected' : '' ?>>Pan Saludable</option>
+                        <option value="Galletería Fina" <?= (isset($producto['pro_marca']) && $producto['pro_marca'] == 'Galletería Fina') ? 'selected' : '' ?>>Galletería Fina</option>
+                        <option value="Pasteles Gourmet" <?= (isset($producto['pro_marca']) && $producto['pro_marca'] == 'Pasteles Gourmet') ? 'selected' : '' ?>>Pasteles Gourmet</option>
+                        <option value="Bagels & More" <?= (isset($producto['pro_marca']) && $producto['pro_marca'] == 'Bagels & More') ? 'selected' : '' ?>>Bagels & More</option>
+                    </select>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="image">Imagen</label>
-                    <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="image" name="pro_imagen" value="<?= htmlspecialchars($producto['pro_imagen'] ?? '') ?>" required />
+                    <input type="hidden" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="image" name="pro_imagen" value="<?= htmlspecialchars($producto['pro_imagen'] ?? '') ?>" required />
                 </div>
                 <div class="flex justify-end pt-4">
                     <button type="button" class="mr-2 bg-red-600 text-white px-4 py-2 rounded-md" onclick="productos()">Cancelar</button>

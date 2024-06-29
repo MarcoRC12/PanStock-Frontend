@@ -47,7 +47,7 @@
                 <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="imagen">
                     Imagen
                 </label>
-                <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="imagen" name="pro_imagen" required />
+                <input type="file" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="imagen" name="pro_imagen" required />
             </div>
             <div class="flex justify-end pt-4">
                 <button type="button" class="mr-2 bg-red-500 text-white px-4 py-2 rounded-md" onclick="hideForm()">Cancelar</button>
@@ -71,13 +71,16 @@
     $(document).ready(function() {
         $('#productForm').on('submit', function(event) {
             event.preventDefault();
-            var formData = $(this).serialize() + '&ajax=1';
+            var formData = new FormData(this);
+            formData.append('ajax', '1');
 
             $.ajax({
                 url: '<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>',
                 type: 'POST',
                 data: formData,
                 dataType: 'json',
+                contentType: false,
+                processData: false,
                 success: function(response) {
                     if (response.Status === 200) {
                         alertify.success('Registro exitoso');
