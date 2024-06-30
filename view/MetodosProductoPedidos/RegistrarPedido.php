@@ -14,6 +14,38 @@ if (isset($_GET['documento'])) {
 //Listar Productos
 $data_products = ListarProductos();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Crear Pedido
+    $clid = $_POST['cl_id'];
+    $penumero = $_POST['pe_numero'];
+    $pedireccion = $_POST['pe_direccion'];
+    $pefechaentrega = $_POST['pe_fechaentrega'];
+    $pepreciototal = $_POST['pe_preciototal'];
+
+    $response = CrearPedido($clid, $penumero, $pedireccion, $pefechaentrega, $pepreciototal);
+
+    if ($response['Status'] === 200) {
+        $peid = $response['id'];
+
+        // Crear ProductoPedidos
+        foreach ($_POST['productos'] as $producto) {
+            CrearProductoPedidos(
+                $producto['pro_id'],
+                $peid,
+                $producto['prope_numorden'],
+                $producto['prope_descripcion'],
+                $producto['prope_cantidad'],
+                0, // Suponiendo que la cantidad entregada inicialmente es 0
+                $producto['prope_precio']
+            );
+        }
+
+        echo "<script>alertify.success('Pedido y productos registrados exitosamente');</script>";
+    } else {
+        echo "<script>alertify.error('Error al registrar el pedido');</script>";
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +73,18 @@ $data_products = ListarProductos();
         }
     </style>
     <script>
+        function actualizarTotal() {
+        var tableBody = document.querySelector('table tbody');
+        var rows = tableBody.querySelectorAll('tr');
+        var total = 0;
+        
+        rows.forEach(function(row) {
+            var precioTotal = parseFloat(row.cells[5].innerText);
+            total += precioTotal;
+        });
+        
+        document.getElementById('pe_preciototal').value = total.toFixed(2);
+    }
         function buscarCliente() {
             var documento = document.getElementById('cl_documento').value;
 
@@ -70,6 +114,65 @@ $data_products = ListarProductos();
                 }
             };
             xhr.send();
+        }
+
+        function showForm() {
+            // Aquí puedes agregar la lógica para mostrar el formulario de agregar producto
+            // Por ejemplo, mostrar un modal o una sección oculta en la página
+            alert('Mostrar formulario de agregar producto');
+        }
+
+        function pedidos() {
+            window.location.href = '../pedidos.php';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('productorderForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var productoSelect = document.getElementById('pro_id');
+            var productoNombre = productoSelect.options[productoSelect.selectedIndex].text;
+            var productoId = productoSelect.value;
+            var numOrden = document.getElementById('prope_numorden').value;
+            var descripcion = document.getElementById('prope_descripcion').value;
+            var cantidad = document.getElementById('prope_cantidad').value;
+            var precioUnitario = document.getElementById('prope_precio').value;
+            var precioTotal = (cantidad * precioUnitario).toFixed(2);
+
+            var tableBody = document.querySelector('table tbody');
+            var row = document.createElement('tr');
+            row.id = productoId;
+            row.dataset.orderNumber = numOrden;
+            row.dataset.description = descripcion;
+
+            row.innerHTML = `
+                <td class="h-12 px-4 text-left align-middle hidden">${productoId}</td>
+                <td class="h-12 px-4 text-left align-middle">${productoNombre}</td>
+                <td class="h-12 px-4 text-left align-middle hidden">${numOrden}</td>
+                <td class="h-12 px-4 text-left align-middle">${precioUnitario}</td>
+                <td class="h-12 px-4 text-left align-middle">${cantidad}</td>
+                <td class="h-12 px-4 text-left align-middle">${precioTotal}</td>
+                <td class="h-12 px-4 text-left align-middle hidden">${descripcion}</td>
+                <td class="h-12 px-4 text-left align-middle">
+                    <button type="button" class="bg-red-500 text-white px-2 py-1 rounded-md" onclick="removeRow(this)">
+                        <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='h-4 w-4'>
+                            <path d='M3 6h18'></path>
+                            <path d='M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6'></path>
+                            <path d='M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2'></path>
+                        </svg>
+                    </button>
+                </td>
+            `;
+
+            tableBody.appendChild(row);
+            actualizarTotal();
+            hideForm();
+        });
+    });
+
+        function removeRow(button) {
+            button.closest('tr').remove();
+            actualizarTotal();
         }
     </script>
     <div class="flex w-full max-w-5xl items-center justify-between gap-8 px-4 py-12 md:px-6 lg:px-8">
@@ -113,7 +216,7 @@ $data_products = ListarProductos();
                     </div>
                     <div class="mt-6 flex items-center justify-between mb-6">
                         <h3 class="text-lg font-medium">Productos</h3>
-                        <button class="inline-flex items-center justify-center whitespace-nowrap text-white font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-blue-500 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3" onclick="showForm()">
+                        <button type="button" class="inline-flex items-center justify-center whitespace-nowrap text-white font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-blue-500 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3" onclick="showForm()">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-2">
                                 <path d="M5 12h14"></path>
                                 <path d="M12 5v14"></path>
@@ -139,7 +242,9 @@ $data_products = ListarProductos();
                                 <!-- Aquí irán las filas de productos, se pueden añadir dinámicamente con JavaScript -->
                             </tbody>
                         </table>
-
+                    </div>
+                    <div class="mt-4 flex justify-end">
+                        Total: S/.<input type="number" step="0.01" id="pe_preciototal" name="pe_preciototal" readonly />
                     </div>
                     <div class="flex justify-end pt-4">
                         <button type="button" class="mr-2 bg-red-500 text-white px-4 py-2 rounded-md" onclick="pedidos()">Cancelar</button>
@@ -151,58 +256,6 @@ $data_products = ListarProductos();
     </div>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="../../lib/alertifyjs/alertify.js"></script>
-    <script>
-        function pedidos() {
-            window.location.href = '../pedidos.php';
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('productorderForm').addEventListener('submit', function(event) {
-                event.preventDefault();
-
-                var productoSelect = document.getElementById('pro_id');
-                var productoNombre = productoSelect.options[productoSelect.selectedIndex].text;
-                var productoId = productoSelect.value;
-                var numOrden = document.getElementById('prope_numorden').value;
-                var descripcion = document.getElementById('prope_descripcion').value;
-                var cantidad = document.getElementById('prope_cantidad').value;
-                var precioUnitario = document.getElementById('prope_precio').value;
-                var precioTotal = (cantidad * precioUnitario).toFixed(2);
-
-                var tableBody = document.querySelector('table tbody');
-                var row = document.createElement('tr');
-                row.id = productoId;
-                row.dataset.orderNumber = numOrden;
-                row.dataset.description = descripcion;
-
-                row.innerHTML = `
-                    <td class="h-12 px-4 text-left align-middle hidden">${productoId}</td>
-                    <td class="h-12 px-4 text-left align-middle">${productoNombre}</td>
-                    <td class="h-12 px-4 text-left align-middle hidden">${numOrden}</td>
-                    <td class="h-12 px-4 text-left align-middle">${precioUnitario}</td>
-                    <td class="h-12 px-4 text-left align-middle">${cantidad}</td>
-                    <td class="h-12 px-4 text-left align-middle">${precioTotal}</td>
-                    <td class="h-12 px-4 text-left align-middle hidden">${descripcion}</td>
-                    <td class="h-12 px-4 text-left align-middle">
-                        <button type="button" class="bg-red-500 text-white px-2 py-1 rounded-md" onclick="removeRow(this)">
-                            <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='h-4 w-4'>
-                                    <path d='M3 6h18'></path>
-                                    <path d='M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6'></path>
-                                    <path d='M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2'></path>
-                                </svg>
-                        </button>
-                    </td>
-                `;
-
-                tableBody.appendChild(row);
-                hideForm();
-            });
-        });
-
-        function removeRow(button) {
-            button.closest('tr').remove();
-        }
-    </script>
     <?php include 'RegistarProductoPedidos.php'; ?>
 </body>
 
