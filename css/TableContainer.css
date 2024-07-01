@@ -1,0 +1,10 @@
+.table-container {
+    max-height: 385px; /* Ajusta la altura según tus necesidades */
+    overflow-y: auto;
+    border: 1px solid #ccc; /* Opcional: para un borde alrededor del contenedor */
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
