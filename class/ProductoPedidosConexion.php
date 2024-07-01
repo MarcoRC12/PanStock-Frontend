@@ -30,7 +30,7 @@ function BuscarProductoPedidos($id)
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-        CURLOPT_URL => PRODUCTOPEDIDOS_URL . '/' . $id,
+        CURLOPT_URL => PRODUCTOPEDIDOS_URL . '/buscar' . '/' . $id,
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => '',
         CURLOPT_MAXREDIRS => 10,
@@ -49,7 +49,7 @@ function BuscarProductoPedidos($id)
     return json_decode($response, true);
 }
 
-function CrearProductoPedidos($proid, $peid, $propenumorden, $propedescripcion, $propecantidad, $propeentregado, $propeprecio)
+function CrearProductoPedidos($proid, $peid, $propenumorden, $propedescripcion, $propecantidad, $propeprecio)
 {
     $curl = curl_init();
 
@@ -68,7 +68,6 @@ function CrearProductoPedidos($proid, $peid, $propenumorden, $propedescripcion, 
             'prope_numorden' => $propenumorden,
             'prope_descripcion' => $propedescripcion,
             'prope_cantidad' => $propecantidad,
-            'prope_entregado' => $propeentregado,
             'prope_precio' => $propeprecio
         ),
         CURLOPT_HTTPHEADER => array(
@@ -86,7 +85,7 @@ function CrearProductoPedidos($proid, $peid, $propenumorden, $propedescripcion, 
     return json_decode($response, true);
 }
 
-function EditarProductoPedidos($id, $proid, $peid, $propenumorden, $propedescripcion, $propecantidad, $propeentregado, $propeprecio)
+function EditarProductoPedidos($id, $proid, $peid, $propenumorden, $propedescripcion, $propecantidad, $propeprecio)
 {
     $curl = curl_init();
 
@@ -96,7 +95,6 @@ function EditarProductoPedidos($id, $proid, $peid, $propenumorden, $propedescrip
         'prope_numorden' => $propenumorden,
         'prope_descripcion' => $propedescripcion,
         'prope_cantidad' => $propecantidad,
-        'prope_entregado' => $propeentregado,
         'prope_precio' => $propeprecio
     ));
 

@@ -96,14 +96,6 @@
                 </svg>
                 <span class="text-base sm:text-lg">Pedidos</span>
             </a>
-            <a class="flex items-center gap-2 rounded-md px-3 py-2 hover-effect" href="reportes.php">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 sm:h-8 sm:w-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
-                    <line x1="12" x2="12" y1="20" y2="10"></line>
-                    <line x1="18" x2="18" y1="20" y2="4"></line>
-                    <line x1="6" x2="6" y1="20" y2="16"></line>
-                </svg>
-                <span class="text-base sm:text-lg">Reportes</span>
-            </a>
         </nav>
     </div>
     <script>
