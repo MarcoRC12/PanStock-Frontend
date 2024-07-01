@@ -1,4 +1,3 @@
-
 <?php
 include '../../class/PedidosConexion.php';
 include '../../class/ProductoPedidosConexion.php';
@@ -60,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
             ];
 
             include 'GenerarComprobantedePago.php';
-
+            
         } else {
             $response = [
                 'Status' => 500,
@@ -133,6 +132,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
                             if (response.Status === 200 && response.Detalle.length > 0) {
                                 var cliente = response.Detalle[0];
                                 document.getElementById('cl_id').value = cliente.cl_id;
+                                document.getElementById('cl_nombre').value = cliente.cl_nombre;
+                                document.getElementById('cl_apellido').value = cliente.cl_apellido;
+                                document.getElementById('cl_email').value = cliente.cl_email;
                                 alertify.success('Cliente encontrado');
                             } else {
                                 alertify.error('Cliente no encontrado');
@@ -285,9 +287,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="pe_numero">Número de pedido</label>
-                            <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="number" id="pe_numero" name="pe_numero" required />
+                            <label for="datos" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Información:</label>
+                            <input type="text" id="cl_nombre" name="cl_nombre" readonly />
+                            <input type="text" id="cl_apellido" name="cl_apellido" readonly />
+                            <input type="hidden" id="cl_email" name="cl_email" readonly />
+
                         </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="pe_numero">Número de pedido</label>
+                        <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="number" id="pe_numero" name="pe_numero" required />
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
