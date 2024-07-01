@@ -74,11 +74,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['_method']) && $_POST['
                 <input type="hidden" name="_method" value="PUT">
                 <input type="hidden" name="pro_id" value="<?= htmlspecialchars($producto_id) ?>">
                 <div class="space-y-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="firstName">Nombre</label>
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="Name">Nombre</label>
                     <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="Name" name="pro_nombre" value="<?= htmlspecialchars($producto['pro_nombre'] ?? '') ?>" required />
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="descripcion">Apellido</label>
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="descripcion">Descripción</label>
                     <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="descripcion" name="pro_descripcion" value="<?= htmlspecialchars($producto['pro_descripcion'] ?? '') ?>" required />
                 </div>
                 <div class="space-y-2">
@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['_method']) && $_POST['
                 </div>
                 <div class="space-y-2">
                     <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="marca">Marca</label>
-                    <select class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="pro_marca" name="pro_marca" required>
+                    <select class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="marca" name="pro_marca" required>
                         <option value="La Panadería" <?= (isset($producto['pro_marca']) && $producto['pro_marca'] == 'La Panadería') ? 'selected' : '' ?>>La Panadería</option>
                         <option value="La Repostería" <?= (isset($producto['pro_marca']) && $producto['pro_marca'] == 'La Repostería') ? 'selected' : '' ?>>La Repostería</option>
                         <option value="Dulce Delicia" <?= (isset($producto['pro_marca']) && $producto['pro_marca'] == 'Dulce Delicia') ? 'selected' : '' ?>>Dulce Delicia</option>
@@ -102,7 +102,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['_method']) && $_POST['
                     </select>
                 </div>
                 <div class="space-y-2">
-                    <input type="hidden" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="image" name="pro_imagen" value="<?= htmlspecialchars($producto['pro_imagen'] ?? '') ?>" required />
+                    <input type="hidden" id="image" name="pro_imagen" value="<?= htmlspecialchars($producto['pro_imagen'] ?? '') ?>" required />
                 </div>
                 <div class="flex justify-end pt-4">
                     <button type="button" class="mr-2 bg-red-600 text-white px-4 py-2 rounded-md" onclick="productos()">Cancelar</button>

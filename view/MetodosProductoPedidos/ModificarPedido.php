@@ -14,71 +14,36 @@ if (isset($_GET['documento'])) {
 // Listar Productos
 $data_products = ListarProductos();
 
-// Verificar si es una solicitud POST y AJAX
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
-    // Crear Pedido
-    $clid = $_POST['cl_id'];
-    $penumero = $_POST['pe_numero'];
-    $pedireccion = $_POST['pe_direccion'];
-    $pefechaentrega = $_POST['pe_fechaentrega'];
-    $pepreciototal = $_POST['pe_preciototal'];
+// Capturar ID del pedido
+$pedido_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-    $response = CrearPedido($clid, $penumero, $pedireccion, $pefechaentrega, $pepreciototal);
+if ($pedido_id) {
+    // Obtener los datos del pedido
+    $pedido_data = BuscarPedido($pedido_id);
 
-    if ($response['Status'] === 200) {
-        $peid = $response['id'];
-        $errores = [];
-
-        // Verificar que productos está definido y es un array
-        if (isset($_POST['productos']) && is_array(json_decode($_POST['productos'], true))) {
-            $productos = json_decode($_POST['productos'], true);
-            // Crear ProductoPedidos
-            foreach ($productos as $producto) {
-                $resultado = CrearProductoPedidos(
-                    $producto['pro_id'],
-                    $peid,
-                    $producto['prope_numorden'],
-                    $producto['prope_descripcion'],
-                    $producto['prope_cantidad'],
-                    $producto['prope_precio']
-                );
-
-                if ($resultado['Status'] != 200) {
-                    $errores[] = $resultado['Error'];
-                }
-            }
-        } else {
-            $errores[] = 'No hay productos definidos o no es un array';
-        }
-
-        // Preparar respuesta
-        if (empty($errores)) {
-            $response = [
-                'Status' => 200,
-                'Message' => 'Pedido y productos registrados exitosamente'
-            ];
-
-            include 'GenerarComprobantedePago.php';
-            
-        } else {
-            $response = [
-                'Status' => 500,
-                'Message' => 'Error al registrar algunos productos del pedido',
-                'Errores' => $errores
-            ];
-        }
+    if ($pedido_data && $pedido_data['Status'] == 200) {
+        $pedido = $pedido_data['Detalle'][0]; // Acceder al primer elemento del array
     } else {
-        $response = [
-            'Status' => 500,
-            'Message' => 'Error al registrar el pedido'
-        ];
+        // Manejar error si no se pueden obtener los datos del pedido
+        die("Error al obtener los datos del pedido.");
     }
 
-    // Enviar respuesta JSON
-    header('Content-Type: application/json');
-    echo json_encode($response);
-    exit();
+    /*
+    // Obtener los productos del pedido
+    $productos_pedido_data = BuscarProductoPedidos($pedido_id);
+
+    if ($productos_pedido_data && $productos_pedido_data['Status'] == 200) {
+        $productos_pedido = $productos_pedido_data['Detalle'][0];
+    } else {
+        // Manejar error si no se pueden obtener los datos de los productos del pedido
+        die("Error al obtener los datos de los productos del pedido.");
+    }*/
+} else {
+    // Manejar error si no se proporciona ID del pedido
+    die("ID de pedido no proporcionado.");
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -132,9 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
                             if (response.Status === 200 && response.Detalle.length > 0) {
                                 var cliente = response.Detalle[0];
                                 document.getElementById('cl_id').value = cliente.cl_id;
-                                document.getElementById('cl_nombre').value = cliente.cl_nombre;
-                                document.getElementById('cl_apellido').value = cliente.cl_apellido;
-                                document.getElementById('cl_email').value = cliente.cl_email;
                                 alertify.success('Cliente encontrado');
                             } else {
                                 alertify.error('Cliente no encontrado');
@@ -207,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('pedidosForm').addEventListener('submit', function(event) {
+            document.getElementById('editpedidosForm').addEventListener('submit', function(event) {
                 event.preventDefault();
                 var formData = new FormData(this);
                 formData.append('ajax', true);
@@ -269,15 +231,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
         <div class="w-full max-w-lg space-y-2">
             <div class="relative bg-white rounded-lg border bg-card text-card-foreground shadow-sm w-full p-6">
                 <div class="flex flex-col space-y-1.5 mb-4">
-                    <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Nuevo Pedido</h3>
+                    <h3 class="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">Modificar Pedido</h3>
                 </div>
-                <form id="pedidosForm" method="post">
+                <form id="editpedidosForm" method="post">
+                    <input type="hidden" name="pe_id" value="<?= htmlspecialchars($pedido_id) ?>">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
                             <label for="cl_documento" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Cliente</label>
                             <div class="flex space-x-2">
-                                <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="text" id="cl_documento" name="cl_documento" required />
-                                <input type="hidden" id="cl_id" name="cl_id" readonly />
+                                <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="text" id="cl_documento" name="cl_documento" value="<?= htmlspecialchars($pedido['cl_documento'] ?? '') ?>" required />
+                                <input type="hidden" id="cl_id" name="cl_id" value="<?= htmlspecialchars($pedido['cl_id'] ?? '') ?>" readonly />
                                 <button type="button" class="bg-yellow-500 text-white px-4 py-2 rounded-md" onclick="event.preventDefault(); buscarCliente();">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 text-muted-foreground">
                                         <circle cx="9" cy="9" r="8"></circle>
@@ -287,25 +250,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
                             </div>
                         </div>
                         <div class="space-y-2">
-                            <label for="datos" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Información:</label>
-                            <input type="text" id="cl_nombre" name="cl_nombre" readonly />
-                            <input type="text" id="cl_apellido" name="cl_apellido" readonly />
-                            <input type="hidden" id="cl_email" name="cl_email" readonly />
-
+                            <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="pe_numero">Número de pedido</label>
+                            <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="number" id="pe_numero" name="pe_numero" value="<?= htmlspecialchars($pedido['pe_numero'] ?? '') ?>" required />
                         </div>
-                    </div>
-                    <div class="space-y-2">
-                        <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="pe_numero">Número de pedido</label>
-                        <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="number" id="pe_numero" name="pe_numero" required />
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
                             <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="pe_direccion">Dirección de Entrega</label>
-                            <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="text" id="pe_direccion" name="pe_direccion" required />
+                            <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="text" id="pe_direccion" name="pe_direccion" value="<?= htmlspecialchars($pedido['pe_direccion'] ?? '') ?>" required />
                         </div>
                         <div class="space-y-2">
                             <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="pe_fechaentrega">Fecha de entrega</label>
-                            <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="date" id="pe_fechaentrega" name="pe_fechaentrega" required />
+                            <input class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" type="date" id="pe_fechaentrega" name="pe_fechaentrega" value="<?= htmlspecialchars($pedido['pe_fechaentrega'] ?? '') ?>" required />
                         </div>
                     </div>
                     <div class="mt-6 flex items-center justify-between mb-6">
@@ -333,13 +289,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['ajax'])) {
                                 </tr>
                             </thead>
                             <tbody class="[&amp;_tr:last-child]:border-0">
-                                <!-- Aquí irán las filas de productos, se pueden añadir dinámicamente con JavaScript -->
+                                <?php foreach ($productos_pedido as $producto) : ?>
+                                    <tr id="<?php echo $producto['pro_id']; ?>" data-order-number="<?php echo $producto['prope_numorden']; ?>" data-description="<?php echo $producto['prope_descripcion']; ?>">
+                                        <td class="h-12 px-4 text-left align-middle hidden"><?php echo htmlspecialchars($producto['pro_id']); ?></td>
+                                        <td class="h-12 px-4 text-left align-middle"><?php echo htmlspecialchars($producto['pro_nombre']); ?></td>
+                                        <td class="h-12 px-4 text-left align-middle hidden"><?php echo htmlspecialchars($producto['prope_numorden']); ?></td>
+                                        <td class="h-12 px-4 text-left align-middle"><?php echo htmlspecialchars($producto['prope_precio']); ?></td>
+                                        <td class="h-12 px-4 text-left align-middle"><?php echo htmlspecialchars($producto['prope_cantidad']); ?></td>
+                                        <td class="h-12 px-4 text-left align-middle"><?php echo htmlspecialchars($producto['prope_precio'] * $producto['prope_cantidad']); ?></td>
+                                        <td class="h-12 px-4 text-left align-middle hidden"><?php echo htmlspecialchars($producto['prope_descripcion']); ?></td>
+                                        <td class="h-12 px-4 text-left align-middle">
+                                            <button type="button" class="bg-red-500 text-white px-2 py-1 rounded-md" onclick="removeRow(this)">
+                                                <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='h-4 w-4'>
+                                                    <path d='M3 6h18'></path>
+                                                    <path d='M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6'></path>
+                                                    <path d='M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2'></path>
+                                                </svg>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
                     <div class="mt-4 flex justify-end">
                         <label for="pe_preciototal" class="block text-gray-700">Precio Total S/. </label>
-                        <input type="number" step="0.01" id="pe_preciototal" name="pe_preciototal" readonly />
+                        <input type="number" step="0.01" id="pe_preciototal" name="pe_preciototal" value="<?= htmlspecialchars($pedido['pe_preciototal'] ?? '') ?>" readonly />
                     </div>
                     <div class="flex justify-end pt-4">
                         <button type="button" class="mr-2 bg-red-500 text-white px-4 py-2 rounded-md" onclick="pedidos()">Cancelar</button>

@@ -1,6 +1,17 @@
+
 <?php
 
 include '../class/PedidosConexion.php';
+
+// Manejar la eliminación del pedido
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete'])) {
+  $id = $_POST['pe_id'];
+  $resultado = EliminarPedido($id);
+
+  header('Content-Type: application/json');
+  echo json_encode($resultado);
+  exit();
+}
 
 $data = ListarPedidos();
 
@@ -61,7 +72,7 @@ $data = ListarPedidos();
                         <td class='border-b px-4 py-2'>{$order['pe_fechaentrega']}</td>
                         <td class='border-b px-4 py-2'>{$order['pe_preciototal']}</td>
                         <td class='border-b px-4 py-2 text-center'>
-                        <button class='bg-yellow-400 inline-flex items-center justify-center text-black px-4 py-2 rounded-md hover:bg-yellow-500 mr-2' onclick='showForm()'>
+                        <button class='bg-yellow-400 inline-flex items-center justify-center text-black px-4 py-2 rounded-md hover:bg-yellow-500 mr-2' onclick='editOrder({$order["pe_id"]})'>
                                 <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='h-4 w-4'>
                                     <path d='M12 22h6a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v10'></path>
                                     <path d='M14 2v4a2 2 0 0 0 2 2h4'></path>
@@ -90,9 +101,14 @@ $data = ListarPedidos();
   </div>
   <script src="../lib/alertifyjs/alertify.js"></script>
   <script src="../lib/jquery-3.7.1.min.js"></script>
+  <script src="../js/eliminarpedidos.js"></script>
   <script>
     function registarPedido() {
       window.location.href = 'MetodosProductoPedidos/RegistrarPedido.php';
+    }
+
+    function editOrder(id){
+      window.location.href = 'MetodosProductoPedidos/ModificarPedido.php?id=' + id;
     }
   </script>
 </body>

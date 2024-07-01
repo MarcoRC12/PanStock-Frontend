@@ -92,11 +92,13 @@ $data_products = ListarProductos();
                         if ($data && isset($data['Status']) && $data['Status'] == 200 && isset($data['Detalle'])) {
                             $inventories = $data['Detalle'];
                             foreach ($inventories as $inventory) {
-                                echo "<tr>
+                                $rowClass = ($inventory['inv_cantidad_disponible'] < 8) ? 'bg-red-300' : '';
+                                $boldClass = ($inventory['inv_cantidad_disponible'] < 8) ? 'font-bold' : '';
+                                echo "<tr class='{$rowClass}'>
                         <td class='border-b px-4 py-2'>{$inventory['inv_id']}</td>
                         <td class='border-b px-4 py-2'>{$inventory['pro_nombre']}</td>
                         <td class='border-b px-4 py-2'>{$inventory['inv_cantidad_total']}</td>
-                        <td class='border-b px-4 py-2'>{$inventory['inv_cantidad_disponible']}</td>
+                        <td class='border-b px-4 py-2 {$boldClass}'>{$inventory['inv_cantidad_disponible']}</td>
                         <td class='border-b px-4 py-2'>{$inventory['inv_fecha_adquisicion']}</td>
                         <td class='border-b px-4 py-2 text-center'>
                         <button class='bg-yellow-400 text-black px-4 py-2 rounded-md hover:bg-yellow-500 mr-2' onclick='editInventory({$inventory["inv_id"]})'>

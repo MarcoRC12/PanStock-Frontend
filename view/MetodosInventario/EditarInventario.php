@@ -76,22 +76,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['_method']) && $_POST['
                 <input type="hidden" name="inv_id" value="<?= htmlspecialchars($inventario_id) ?>">
                 <div class="space-y-2">
                     <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="producto">Producto</label>
-                    <select class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="pro_id" name="pro_id" required>
+                    <select class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="producto" name="pro_id" required>
                         <?php foreach ($data_products["Detalle"] as $proid) : ?>
                             <option value="<?= htmlspecialchars($proid["pro_id"]) ?>" <?= (isset($invetario["pro_id"]) && $invetario['pro_id'] == $proid['pro_id']) ? 'selected' : '' ?>><?= htmlspecialchars($proid['pro_nombre']) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="lastName">Cantidad Total</label>
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="invcantidadtotal">Cantidad Total</label>
                     <input type="number" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="invcantidadtotal" name="inv_cantidad_total" value="<?= htmlspecialchars($invetario['inv_cantidad_total'] ?? '') ?>" required />
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="dni">Cantidad Disponible</label>
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="invcantidaddisponible">Cantidad Disponible</label>
                     <input type="number" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="invcantidaddisponible" name="inv_cantidad_disponible" value="<?= htmlspecialchars($invetario['inv_cantidad_disponible'] ?? '') ?>" required />
                 </div>
                 <div class="space-y-2">
-                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="phone">Fecha de adquisición</label>
+                    <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="invfechaadquisicion">Fecha de adquisición</label>
                     <input type="date" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="invfechaadquisicion" name="inv_fecha_adquisicion" value="<?= htmlspecialchars($invetario['inv_fecha_adquisicion'] ?? '') ?>" required />
                 </div>
                 <div class="flex justify-end pt-4">
